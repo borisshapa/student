@@ -9,6 +9,11 @@ import java.util.function.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Search students database.
+ *
+ * @author Boris Shaposhnikov
+ */
 public class StudentDB implements AdvancedStudentGroupQuery {
     private static final Comparator<Student> STUDENT_BY_NAME_COMPARATOR =
             Comparator.comparing(Student::getLastName)
@@ -29,7 +34,7 @@ public class StudentDB implements AdvancedStudentGroupQuery {
                 .entrySet().stream();
     }
 
-    List<Group> getGroupsBy(final Collection<Student> students, final UnaryOperator<List<Student>> listOperator) {
+    private List<Group> getGroupsBy(final Collection<Student> students, final UnaryOperator<List<Student>> listOperator) {
         return getGroupsStream(students, Student::getGroup)
                 .map(group -> new Group(group.getKey(), listOperator.apply(group.getValue())))
                 .collect(Collectors.toList());
@@ -208,16 +213,16 @@ public class StudentDB implements AdvancedStudentGroupQuery {
                 Comparator.naturalOrder(), "");
     }
 
-    public <T> List<T> getByIndeces(final List<Student> students, final int[] indices, final Function<Student, T> getStudentParameter) {
+    private <T> List<T> getByIndeces(final List<Student> students, final int[] indices, final Function<Student, T> getStudentParameter) {
         return Arrays.stream(indices)
                 .mapToObj(students::get)
                 .map(getStudentParameter)
                 .collect(Collectors.toList());
     }
 
-    public <T> List<T> getByIndeces(final Collection<Student> students,
-                                    final int[] indices,
-                                    final Function<Student, T> getStudentParameter) {
+    private <T> List<T> getByIndeces(final Collection<Student> students,
+                                     final int[] indices,
+                                     final Function<Student, T> getStudentParameter) {
         return getByIndeces(List.copyOf(students), indices, getStudentParameter);
     }
 
